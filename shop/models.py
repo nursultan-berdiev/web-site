@@ -7,12 +7,41 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='category_image')
 
+    def get_count(self):
+        count = 0
+        items = Item.objects.filter(category=self)
+        for item in items:
+            color_qty = ColorItemQuantity.objects.filter(item=item)
+            for qty in color_qty:
+                count += qty.quantity
+
+        return count
+
     def __str__(self):
         return self.name
 
 
+class Brand(models.Model):
+    name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='brands', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_count(self):
+        count = 0
+        items = Item.objects.filter(brand=self)
+        for item in items:
+            color_qty = ColorItemQuantity.objects.filter(item=item)
+            for qty in color_qty:
+                count += qty.quantity
+
+        return count
+
+
 class Item(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     price = models.FloatField()
     discount_price = models.FloatField(null=True, blank=True)

@@ -17,4 +17,5 @@ class ItemAdmin(admin.ModelAdmin):
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Category)
 admin.site.register(Color)
+admin.site.register(Brand)
 
